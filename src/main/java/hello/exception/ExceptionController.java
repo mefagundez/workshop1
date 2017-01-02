@@ -1,5 +1,6 @@
 package hello.exception;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -11,10 +12,11 @@ import java.io.IOException;
 public class ExceptionController {
 
     @ExceptionHandler(value = BadRequestException.class)
-    public void exception(BadRequestException ex,
+    public ResponseEntity exception(BadRequestException ex,
                           HttpServletRequest request, HttpServletResponse response) throws IOException{
-        System.out.println("Exception in controller caught!---------------------------------------");
-        response.sendError(HttpStatus.PRECONDITION_FAILED.value(),"message");
+        return new ResponseEntity<>(
+                ex.getMessage(),
+                HttpStatus.PRECONDITION_FAILED);
     }
 
 }

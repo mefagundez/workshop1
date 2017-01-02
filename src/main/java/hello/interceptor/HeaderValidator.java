@@ -1,4 +1,5 @@
 package hello.interceptor;
+import hello.exception.BadRequestException;
 import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,12 +26,12 @@ public class HeaderValidator extends HandlerInterceptorAdapter {
         boolean validatorsInterceptorsResponse = Arrays.stream(validatorInterceptors).allMatch(validator -> {
             Optional<String> actualHeader = Optional.ofNullable(request.getHeader(validator.getHeaderParam()));
             if (actualHeader.isPresent()){
-                return validator.getPredicate().test(actualHeader.get());
+                if (validator.getPredicate().test(actualHeader.get())) return true;
+                else throw new BadRequestException(validator.getValidationMessage());
             } else {
-                return false;
+                throw new BadRequestException("Header " + validator.getHeaderParam() + " does NOT exist");
             }
         });
-        System.out.println("-*-*-*-*-*-*---*-*-*validators interceptors response -> " + validatorsInterceptorsResponse);
         return super.preHandle(request, response, handler);
     }
 

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 public class AuthorizationValidator implements ValidatorInterceptor {
 
     private String headerName = "Authorization";
+    private String validationMessage = "Authorization header is empty";
 
     public String getHeaderParam(){
         return headerName;
@@ -13,5 +14,7 @@ public class AuthorizationValidator implements ValidatorInterceptor {
     public Predicate<? super String> getPredicate() {
         return s -> !s.isEmpty();
     }
-
+    public String getValidationMessage() {
+        return validationMessage;
+    }
 }

@@ -7,4 +7,5 @@ import java.util.function.Predicate;
 public interface ValidatorInterceptor {
     String getHeaderParam();
     Predicate<? super String> getPredicate();
+    String getValidationMessage();
 }
